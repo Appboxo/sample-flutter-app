@@ -58,7 +58,7 @@ class _SecondPageState extends State<SecondPage> {
             RaisedButton(
               color: Colors.blue,
               onPressed: () {
-                AppboxoSdk.openMiniApp("app36902", "");
+                AppboxoSdk.openMiniapp("app36902", "");
               },
               child: Text(
                 'Run miniapp',

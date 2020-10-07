@@ -57,7 +57,7 @@ class _FirstPageState extends State<FirstPage> {
             RaisedButton(
               color: Colors.blue,
               onPressed: () {
-                AppboxoSdk.openMiniApp("app36902", "");
+                AppboxoSdk.openMiniapp("app36902", "");
               },
               child: Text(
                 'Run miniapp',
