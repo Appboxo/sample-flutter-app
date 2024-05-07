@@ -10,19 +10,14 @@ class FirstPage extends StatefulWidget {
 }
 
 class _FirstPageState extends State<FirstPage> {
-  StreamSubscription<CustomEvent> subscription;
+  late StreamSubscription<CustomEvent> subscription;
 
   @override
   void initState() {
-    subscription = AppboxoSdk.customEvents().listen((CustomEvent event) {
+    subscription = Appboxo.customEvents().listen((CustomEvent event) {
       if (event.appId == 'app36902') {
-        AppboxoSdk.sendEvent(
-          CustomEvent(
-            type: 'event',
-            appId: event.appId,
-            payload: {},
-            requestId: event.requestId,
-          ),
+        Appboxo.sendEvent(
+          CustomEvent('event', event.appId,{}, event.requestId),
         );
       }
     });
@@ -54,10 +49,10 @@ class _FirstPageState extends State<FirstPage> {
               ),
             ),
             const SizedBox(height: 24),
-            RaisedButton(
+            MaterialButton(
               color: Colors.blue,
               onPressed: () {
-                AppboxoSdk.openMiniapp("app36902", "");
+                Appboxo.openMiniapp("app36902");
               },
               child: Text(
                 'Run miniapp',

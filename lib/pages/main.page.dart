@@ -17,7 +17,7 @@ class MainPage extends StatelessWidget {
           children: [
             SizedBox(
               width: 180,
-              child: RaisedButton(
+              child: MaterialButton(
                 color: Colors.blue,
                 onPressed: () {
                   Navigator.of(context).pushNamed(Routes.FirstPage);
@@ -33,7 +33,7 @@ class MainPage extends StatelessWidget {
             ),
             SizedBox(
               width: 180,
-              child: RaisedButton(
+              child: MaterialButton(
                 color: Colors.blue,
                 onPressed: () {
                   Navigator.of(context).pushNamed(Routes.SecondPage);

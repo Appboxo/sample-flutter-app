@@ -10,19 +10,18 @@ class SecondPage extends StatefulWidget {
 }
 
 class _SecondPageState extends State<SecondPage> {
-  StreamSubscription<CustomEvent> subscription;
+  late StreamSubscription<CustomEvent> subscription;
 
   @override
   void initState() {
-    subscription = AppboxoSdk.customEvents().listen((CustomEvent event) {
+    subscription = Appboxo.customEvents().listen((CustomEvent event) {
       if (event.appId == 'app36902') {
-        AppboxoSdk.sendEvent(
+        Appboxo.sendEvent(
           CustomEvent(
-            type: 'event',
-            appId: event.appId,
-            payload: {},
-            errorType: 'canceled',
-            requestId: event.requestId,
+            'event',
+            event.appId,
+            {},
+            event.requestId
           ),
         );
       }
@@ -55,10 +54,10 @@ class _SecondPageState extends State<SecondPage> {
               ),
             ),
             const SizedBox(height: 24),
-            RaisedButton(
+            MaterialButton(
               color: Colors.blue,
               onPressed: () {
-                AppboxoSdk.openMiniapp("app36902", "");
+                Appboxo.openMiniapp("app36902");
               },
               child: Text(
                 'Run miniapp',

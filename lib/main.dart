@@ -17,12 +17,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Future<void> Function() subscription;
+  late Future<void> Function() subscription;
 
   @override
   void initState() {
-    AppboxoSdk.setConfig("[CLIENT_ID]");
-    subscription = AppboxoSdk.lifecycleHooksListener(
+    Appboxo.setConfig("[CLIENT_ID]", multitaskMode: false);
+    subscription = Appboxo.lifecycleHooksListener(
       onLaunch: (appId) {
         print(appId);
         print('onLaunch');
