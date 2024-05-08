@@ -21,7 +21,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    Appboxo.setConfig("[CLIENT_ID]", multitaskMode: false);
+    Appboxo.setConfig("[CLIENT_ID]", multitaskMode: false, theme: 'light');
     subscription = Appboxo.lifecycleHooksListener(
       onLaunch: (appId) {
         print(appId);
