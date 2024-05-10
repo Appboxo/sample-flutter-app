@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   appboxo_sdk: 0.1.23
+  http: ^1.1.0
 
 
   # The following adds the Cupertino Icons font to your application.

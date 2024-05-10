@@ -8,6 +8,8 @@ import 'common/routes.dart';
 import 'pages/main.page.dart';
 import 'pages/first.page.dart';
 import 'pages/second.page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() => runApp(MyApp());
 
@@ -23,6 +25,19 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     Appboxo.setConfig("[CLIENT_ID]", multitaskMode: false, theme: 'light');
     subscription = Appboxo.lifecycleHooksListener(
+      onAuth: (appId){
+        http
+            .get(Uri.parse(
+            'https://demo-hostapp.appboxo.com/api/get_auth_code/'))
+            .then((response) {
+          if (response.statusCode >= 400) {
+            print('Error fetching auth code: ${response.body}');
+            Appboxo.setAuthCode(appId, "");
+          } else {
+            Appboxo.setAuthCode(appId, json.decode(response.body)["auth_code"]);
+          }
+        });
+      },
       onLaunch: (appId) {
         print(appId);
         print('onLaunch');
