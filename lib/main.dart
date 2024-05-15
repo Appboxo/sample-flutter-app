@@ -1,15 +1,18 @@
 /*CORE*/
-import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:convert';
+
 /*APPBOXO_SDK*/
 import 'package:appboxo_sdk/appboxo_sdk.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 /*ROUTeS*/
 import 'common/routes.dart';
+import 'pages/first.page.dart';
 /*PAGES*/
 import 'pages/main.page.dart';
-import 'pages/first.page.dart';
 import 'pages/second.page.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 void main() => runApp(MyApp());
 
@@ -23,11 +26,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    Appboxo.setConfig("[CLIENT_ID]", multitaskMode: false, theme: 'light');
+    Appboxo.setConfig("[CLIENT_ID]", multitaskMode: true, theme: 'light');
     subscription = Appboxo.lifecycleHooksListener(
-      onAuth: (appId){
-        http
-            .get(Uri.parse(
+      onAuth: (appId) {
+        http.get(Uri.parse(
             'https://demo-hostapp.appboxo.com/api/get_auth_code/'))
             .then((response) {
           if (response.statusCode >= 400) {
@@ -60,6 +62,7 @@ class _MyAppState extends State<MyApp> {
         print('onError');
       },
     );
+
     super.initState();
   }
 

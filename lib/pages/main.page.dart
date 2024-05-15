@@ -3,8 +3,9 @@ import 'dart:async';
 
 import 'package:appboxo_sdk/appboxo_sdk.dart';
 import 'package:flutter/material.dart';
+import 'package:ndialog/ndialog.dart';
+import '../common/routes.dart';
 /*ROUTES*/
-import 'package:appboxo_flutter_sample_app/common/routes.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late StreamSubscription<MiniappsResult> subscription;
-  List<MiniappData> miniapps = List.empty();
+  late StreamSubscription<PaymentEvent> paymentSubscription;
 
   @override
   void initState() {
@@ -23,12 +24,43 @@ class _MainPageState extends State<MainPage> {
       });
     });
     Appboxo.getMiniapps();
+
+    paymentSubscription = Appboxo.paymentEvents().listen((PaymentEvent payment) async {
+      Appboxo.hideMiniapps(); // need to hide the miniapp before showing the payment page or popup
+      NDialog(
+        dialogStyle: DialogStyle(titleDivider: true),
+        title: Text("Payment"),
+        content: Text("Confirm payment"),
+        actions: <Widget>[
+          TextButton(
+              child: Text("Confirm"),
+              onPressed: () {
+                Navigator.pop(context);
+                //.. send request to confirm payment to your backend
+                payment.status = 'success'; // change the payment status
+                Appboxo.sendPaymentEvent(payment); // send payment result to miniapp
+                Appboxo.openMiniapp(payment.appId); // need to open the miniapp
+              }),
+          TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+                payment.status = 'cancelled';
+                Appboxo.sendPaymentEvent(payment);
+                Appboxo.openMiniapp(payment.appId);
+              }),
+        ],
+      ).show(context);
+    });
     super.initState();
   }
+
+  List<MiniappData> miniapps = List.empty();
 
   @override
   void dispose() {
     subscription.cancel();
+    paymentSubscription.cancel();
     super.dispose();
   }
 
