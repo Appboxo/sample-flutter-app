@@ -21,12 +21,21 @@ class _MainPageState extends State<MainPage> {
     subscription = Appboxo.miniapps().listen((MiniappsResult result) {
       setState(() {
         miniapps = result.miniapps ?? List.empty();
+        miniapps.forEach((data) {
+          print(data.appId);
+          print(data.name);
+          print(data.description);
+          print(data.logo);
+          print(data.category);
+        });
       });
     });
     Appboxo.getMiniapps();
 
-    paymentSubscription = Appboxo.paymentEvents().listen((PaymentEvent payment) async {
-      Appboxo.hideMiniapps(); // need to hide the miniapp before showing the payment page or popup
+    paymentSubscription =
+        Appboxo.paymentEvents().listen((PaymentEvent payment) async {
+      Appboxo
+          .hideMiniapps(); // need to hide the miniapp before showing the payment page or popup
       NDialog(
         dialogStyle: DialogStyle(titleDivider: true),
         title: Text("Payment"),
@@ -38,7 +47,8 @@ class _MainPageState extends State<MainPage> {
                 Navigator.pop(context);
                 //.. send request to confirm payment to your backend
                 payment.status = 'success'; // change the payment status
-                Appboxo.sendPaymentEvent(payment); // send payment result to miniapp
+                Appboxo.sendPaymentEvent(
+                    payment); // send payment result to miniapp
                 Appboxo.openMiniapp(payment.appId); // need to open the miniapp
               }),
           TextButton(
