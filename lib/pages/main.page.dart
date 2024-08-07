@@ -4,8 +4,6 @@ import 'dart:async';
 import 'package:appboxo_sdk/appboxo_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
-import '../common/routes.dart';
-/*ROUTES*/
 
 class MainPage extends StatefulWidget {
   @override
@@ -15,6 +13,9 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   late StreamSubscription<MiniappsResult> subscription;
   late StreamSubscription<PaymentEvent> paymentSubscription;
+
+  List<MiniappData> miniapps = List.empty();
+  final miniappIdController = TextEditingController();
 
   @override
   void initState() {
@@ -65,12 +66,11 @@ class _MainPageState extends State<MainPage> {
     super.initState();
   }
 
-  List<MiniappData> miniapps = List.empty();
-
   @override
   void dispose() {
     subscription.cancel();
     paymentSubscription.cancel();
+    miniappIdController.dispose();
     super.dispose();
   }
 
@@ -79,47 +79,35 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Appboxo flutter test app'),
+          title: Text('Flutter Boxo Demo'),
         ),
         body: Column(children: [
-          Container(
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 180,
-                child: MaterialButton(
-                  color: Colors.blue,
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.FirstPage);
-                  },
-                  child: Text(
-                    'First screen',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: TextField(
+              controller: miniappIdController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'app ID',
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 180,
+            child: MaterialButton(
+              color: Colors.blue,
+              onPressed: () {
+                Appboxo.openMiniapp(miniappIdController.text);
+              },
+              child: Text(
+                'Open miniapp',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
                 ),
               ),
-              SizedBox(
-                width: 180,
-                child: MaterialButton(
-                  color: Colors.blue,
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.SecondPage);
-                  },
-                  child: Text(
-                    'Second screen',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          )),
+            ),
+          ),
           Expanded(
               child: ListView.builder(
                   padding: const EdgeInsets.all(8),
@@ -138,7 +126,10 @@ class _MainPageState extends State<MainPage> {
                                 width: 40,
                                 height: 40,
                               ),
-                            Text('${miniapps[index].name}')
+                            Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 8),
+                                child: Text('${miniapps[index].name}'))
                           ]),
                         ));
                   }))
