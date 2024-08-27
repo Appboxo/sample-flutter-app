@@ -19,10 +19,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late Future<void> Function() subscription;
 
+
   @override
   void initState() {
-    Appboxo.setConfig('602248',
-        userId: '24', multitaskMode: true, theme: 'light');
     subscription = Appboxo.lifecycleHooksListener(
       onAuth: (appId) {
         http

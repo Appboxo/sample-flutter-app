@@ -3,7 +3,9 @@ import 'dart:async';
 
 import 'package:appboxo_sdk/appboxo_sdk.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:ndialog/ndialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -16,6 +18,16 @@ class _MainPageState extends State<MainPage> {
 
   List<MiniappData> miniapps = List.empty();
   final miniappIdController = TextEditingController();
+  final clientIdController = TextEditingController();
+
+  start() async{
+    final prefs = await SharedPreferences.getInstance();
+    clientIdController.text = await prefs.getString('client_id') ?? '602248';
+    var clientId = await prefs.getString('client_id') ?? '602248';
+    Appboxo.setConfig(clientId,
+        userId: '24', multitaskMode: true, theme: 'light');
+    Appboxo.getMiniapps();
+  }
 
   @override
   void initState() {
@@ -31,7 +43,6 @@ class _MainPageState extends State<MainPage> {
         });
       });
     });
-    Appboxo.getMiniapps();
 
     paymentSubscription =
         Appboxo.paymentEvents().listen((PaymentEvent payment) async {
@@ -63,6 +74,9 @@ class _MainPageState extends State<MainPage> {
         ],
       ).show(context);
     });
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      start();
+    });
     super.initState();
   }
 
@@ -71,6 +85,7 @@ class _MainPageState extends State<MainPage> {
     subscription.cancel();
     paymentSubscription.cancel();
     miniappIdController.dispose();
+    clientIdController.dispose();
     super.dispose();
   }
 
@@ -82,32 +97,74 @@ class _MainPageState extends State<MainPage> {
           title: Text('Flutter Boxo Demo'),
         ),
         body: Column(children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextField(
-              controller: miniappIdController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'app ID',
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 180,
-            child: MaterialButton(
-              color: Colors.blue,
-              onPressed: () {
-                Appboxo.openMiniapp(miniappIdController.text);
-              },
-              child: Text(
-                'Open miniapp',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-          ),
+          Row(children: [
+            Flexible(
+                flex: 1,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  child: TextField(
+                    controller: clientIdController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Client ID',
+                    ),
+                  ),
+                )),
+            SizedBox(
+              child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  child: MaterialButton(
+                    color: Colors.blue,
+                    onPressed: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setString('client_id', clientIdController.text);
+                      Appboxo.setConfig(clientIdController.text,
+                          userId: '24', multitaskMode: true, theme: 'light');
+                      Appboxo.getMiniapps();
+                    },
+                    child: Text(
+                      'Set',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  )),
+            )
+          ]),
+          Row(children: [
+            Flexible(
+                flex: 1,
+                child: Padding(
+                  padding:
+                      EdgeInsets.only(left: 8, right: 8, top: 16, bottom: 8),
+                  child: TextField(
+                    controller: miniappIdController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'app ID',
+                    ),
+                  ),
+                )),
+            SizedBox(
+                width: 180,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  child: MaterialButton(
+                    color: Colors.blue,
+                    onPressed: () {
+                      Appboxo.openMiniapp(miniappIdController.text);
+                    },
+                    child: Text(
+                      'Open',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ))
+          ]),
           Expanded(
               child: ListView.builder(
                   padding: const EdgeInsets.all(8),
