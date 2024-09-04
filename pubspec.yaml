@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  appboxo_sdk: 0.2.10
+  appboxo_sdk: 0.2.11
   http: ^1.1.0
 
 

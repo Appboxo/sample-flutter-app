@@ -1,13 +1,17 @@
 PODS:
   - appboxo_sdk (0.0.1):
-    - AppBoxoSDK (= 1.5.8)
+    - AppBoxoSDK (= 1.5.11)
     - Flutter
-  - AppBoxoSDK (1.5.8)
+  - AppBoxoSDK (1.5.11)
   - Flutter (1.0.0)
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
 
 DEPENDENCIES:
   - appboxo_sdk (from `.symlinks/plugins/appboxo_sdk/ios`)
   - Flutter (from `Flutter`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
 
 SPEC REPOS:
   trunk:
@@ -18,11 +22,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/appboxo_sdk/ios"
   Flutter:
     :path: Flutter
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
-  appboxo_sdk: ef4d556b4d55a92b8512b778c5e0be7b40491d3f
-  AppBoxoSDK: 26aaaddb474b3127653da8e0d7a95e94ed2a2805
+  appboxo_sdk: 7a428870c32abfdb41a3495dbd176c91361a2713
+  AppBoxoSDK: ea43b19adf09e85354f93fc33c4a6d6ee0f7ced4
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
 
 PODFILE CHECKSUM: cc1f88378b4bfcf93a6ce00d2c587857c6008d3b
 
